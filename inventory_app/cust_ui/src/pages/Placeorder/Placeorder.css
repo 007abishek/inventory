@@ -1,0 +1,57 @@
+.place-order {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .place-order h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .place-order div {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .place-order label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .place-order input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .place-order h3 {
+    margin: 20px 0;
+    color: #444;
+  }
+  
+  .place-order button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .place-order button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,0 +1,45 @@
+.dashboard-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .revenue-info {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .revenue-info p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #444;
+  }
+  
+  .revenue-info strong {
+    color: #000;
+  }
+  
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-container {
+      max-width: 90%;
+      padding: 15px;
+    }
+  }
+  

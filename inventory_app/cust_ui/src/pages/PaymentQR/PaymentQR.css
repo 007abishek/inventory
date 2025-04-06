@@ -1,0 +1,58 @@
+/* Full-page center alignment */
+.payment-container {
+    display: flex;
+    min-width: 200vh;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ebeced, #fbfbfc);
+    padding: 20px;
+}
+
+/* Payment card styling */
+.payment-card {
+    background: rgb(206, 230, 222);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+}
+
+/* Title styling */
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Amount display */
+.amount-display {
+    font-size: 20px;
+    font-weight: bold;
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+/* QR code box */
+.qr-box {
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Scan instruction text */
+.scan-text {
+    margin-top: 12px;
+    font-size: 15px;
+    color: #555;
+}
