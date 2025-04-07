@@ -40,7 +40,7 @@ const CheckoutForm = () => {
   
     try {
       // Step 1: Request a PaymentIntent from the backend
-      const { data } = await axios.post("http://localhost:5001/api/payment/stripe", {
+      const { data } = await axios.post("https://inventory-backend-buxd.onrender.com/api/payment/stripe", {
         amount: totalAmount * 100, // Convert to cents
       });
   
