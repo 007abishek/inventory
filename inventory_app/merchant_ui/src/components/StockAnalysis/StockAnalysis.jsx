@@ -18,7 +18,7 @@ const StockAnalysis = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5001/api/sales/stock-analysis", {
+        const response = await axios.get("https://inventory-backend-buxd.onrender.com/api/sales/stock-analysis", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
