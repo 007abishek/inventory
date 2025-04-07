@@ -33,7 +33,9 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "http://localhost:5175"
+  "http://localhost:5175",
+  "https://inventory-frontend-customer.onrender.com",
+  "https://inventory-frontend-8hj3.onrender.com"
 ];
 
 app.use(
