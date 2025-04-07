@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
-  const apiUrl = "http://localhost:5001";
+  const apiUrl = "https://inventory-backend-buxd.onrender.com";
   const customerId = localStorage.getItem("customerId");
 
   useEffect(() => {
