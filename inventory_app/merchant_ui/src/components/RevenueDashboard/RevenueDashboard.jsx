@@ -19,7 +19,7 @@ const RevenueDashboard = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5001/api/sales/revenue-dashboard", {
+        const response = await axios.get("https://inventory-backend-buxd.onrender.com/api/sales/revenue-dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
