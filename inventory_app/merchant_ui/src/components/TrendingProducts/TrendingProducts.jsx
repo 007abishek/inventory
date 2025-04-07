@@ -19,7 +19,7 @@ const TrendingProducts = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5001/api/sales/trending-products", {
+        const response = await axios.get("https://inventory-backend-buxd.onrender.com/api/sales/trending-products", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
