@@ -8,7 +8,7 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  const apiUrl = "http://localhost:5001";
+  const apiUrl = "https://inventory-backend-buxd.onrender.com";
 
   const customerId = localStorage.getItem("customerId");
 
