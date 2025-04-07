@@ -24,7 +24,7 @@ const MerchantLogin = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5001/api/merchants/login', formData, {
+      const response = await axios.post('https://inventory-backend-buxd.onrender.com/api/merchants/login', formData, {
         withCredentials: true,
       });
 
