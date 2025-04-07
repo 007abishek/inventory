@@ -11,7 +11,7 @@ const Sales = () => {
         const fetchSales = async () => {
             try {
                 const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
-                const response = await axios.get("http://localhost:5001/api/sales/list-sales", {
+                const response = await axios.get("https://inventory-backend-buxd.onrender.com/api/sales/list-sales", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
