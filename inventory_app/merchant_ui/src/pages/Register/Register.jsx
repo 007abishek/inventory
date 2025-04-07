@@ -28,7 +28,7 @@ const MerchantRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('https://inventory-backend-buxd.onrender.com/api/merchants/register', formData);
+      const response = await api.post('https://inventory-backend-buxd.onrender.com/merchants/register', formData);
       alert('Merchant registered successfully');
       navigate('/'); // Redirect to login page
     } catch (error) {
