@@ -19,7 +19,7 @@ const SalesReport = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:5001/api/sales/sales-report?period=${period}`,
+        `https://inventory-backend-buxd.onrender.com/api/sales/sales-report?period=${period}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
