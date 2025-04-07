@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import './PlaceOrder.css';
+import './Placeorder.css';
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
