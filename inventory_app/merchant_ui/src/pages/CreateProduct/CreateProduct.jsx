@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './CreateProduct.css';
 
 const api = axios.create({
-  baseURL: "http://localhost:5001", // Update with deployed backend URL if needed
+  baseURL: "https://inventory-backend-buxd.onrender.com", // Update with deployed backend URL if needed
   withCredentials: true,
 });
 
