@@ -4,7 +4,7 @@ import axios from "axios";
 import "./producthome.css";
 
 const api = axios.create({
-  baseURL: "http://localhost:5001",
+  baseURL: "https://inventory-backend-buxd.onrender.com",
   withCredentials: true,
 });
 
