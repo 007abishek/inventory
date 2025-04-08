@@ -13,6 +13,7 @@ const Register = () => {
   });
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null); // ✅ New state
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -31,6 +32,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null); // Reset success message
 
     const validationError = validateInputs();
     if (validationError) {
@@ -41,13 +43,17 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://inventory-frontend-customer.onrender.com/api/worker/register", formData, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "https://inventory-frontend-customer.onrender.com/api/worker/register",
+        formData,
+        { withCredentials: true }
+      );
 
       if (response.status === 201) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/dashboard"); // Redirect to dashboard after successful registration
+        setSuccess("Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/"); // ✅ Redirect to login page
+        }, 2000); // 2-second delay to show success message
       }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed. Please try again.");
@@ -61,6 +67,7 @@ const Register = () => {
       <div className="register-box">
         <h2>Worker Registration</h2>
         {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
         <form onSubmit={handleSubmit}>
           <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
           <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
