@@ -41,7 +41,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5001/api/worker/register", formData, {
+      const response = await axios.post("https://inventory-frontend-customer.onrender.com/api/worker/register", formData, {
         withCredentials: true,
       });
 
