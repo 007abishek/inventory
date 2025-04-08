@@ -21,7 +21,7 @@ const WorkerLogin = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post("http://localhost:5001/api/worker/login", formData, {
+      const response = await axios.post("https://inventory-backend-buxd.onrender.com/api/worker/login", formData, {
         withCredentials: true,
       });
 
