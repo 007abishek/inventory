@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const api = axios.create({
+  baseURL: 'https://inventory-backend-buxd.onrender.com', // Replace with your backend URL
+  withCredentials: true, // Include cookies for secure API calls
+});
 
 const Register = () => {
   const [formData, setFormData] = useState({
