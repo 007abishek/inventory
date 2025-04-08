@@ -7,7 +7,7 @@ const WorkerDashboard = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
-  const apiUrl = "http://localhost:5001";
+  const apiUrl = "https://inventory-backend-buxd.onrender.com";
   const navigate = useNavigate();
   const workerId = localStorage.getItem("workerId");
 
