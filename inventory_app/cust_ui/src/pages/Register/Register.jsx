@@ -44,7 +44,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "https://inventory-frontend-customer.onrender.com/api/worker/register",
+        "https://inventory-backend-buxd.onrender.com/api/worker/register",
         formData,
         { withCredentials: true }
       );
