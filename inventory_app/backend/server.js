@@ -6,9 +6,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 import Stripe from "stripe";
-import Product from "./models/productModel.js"; // Import Product model
+import Product from "./models/productModel.js";
 
-// Routes and Middleware
+// Import Routes and Middleware
 import workerRoute from "./routes/workerRoute.js";
 import merchantRoute from "./routes/merchantRoute.js";
 import productRoute from "./routes/productRoute.js";
@@ -16,13 +16,14 @@ import cartRoutes from "./routes/cartRoute.js";
 import salesRoute from "./routes/salesRoute.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
+// Load environment variables and connect DB
 dotenv.config();
 connectDB();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// __dirname setup for ES Modules
+// Setup __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// CORS Configuration
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -53,7 +55,7 @@ app.use(
   })
 );
 
-// Static file serving
+// Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // API Routes
@@ -63,14 +65,14 @@ app.use("/api/products", productRoute);
 app.use("/api/cart", cartRoutes);
 app.use("/api/sales", salesRoute);
 
-// Stripe Payment Route
+// Stripe Payment Integration
 app.post("/api/payment/stripe", async (req, res) => {
   try {
     const { amount } = req.body;
     if (!amount) return res.status(400).json({ error: "Amount is required" });
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // convert to paisa
+      amount: amount * 100,
       currency: "inr",
       payment_method_types: ["card"],
     });
@@ -82,15 +84,19 @@ app.post("/api/payment/stripe", async (req, res) => {
   }
 });
 
-// Dialogflow Webhook Route
+// ✅ Dialogflow Webhook Route (CheckStock)
 app.post("/dialogflow-webhook", async (req, res) => {
   try {
     const intent = req.body.queryResult.intent.displayName;
-    const productName = req.body.queryResult.parameters.product;
+    const productName = req.body.queryResult.parameters.product?.toLowerCase();
 
     if (intent === "CheckStock") {
+      if (!productName) {
+        return res.json({ fulfillmentText: "Please provide the product name." });
+      }
+
       const product = await Product.findOne({
-        name: { $regex: new RegExp(productName, "i") }
+        name: { $regex: new RegExp(`^${productName}$`, "i") }
       });
 
       if (product) {
@@ -103,12 +109,12 @@ app.post("/dialogflow-webhook", async (req, res) => {
       res.json({ fulfillmentText: "Intent not handled yet." });
     }
   } catch (err) {
-    console.error("Dialogflow webhook error:", err);
+    console.error("Dialogflow Webhook Error:", err);
     res.json({ fulfillmentText: "There was an error processing your request." });
   }
 });
 
-// Base Route
+// Home Route
 app.get("/", (req, res) => {
   res.send("Welcome to the Inventory Management API");
 });
