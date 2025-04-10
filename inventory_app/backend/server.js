@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
-import Stripe from "stripe";  // Import Stripe
+import Stripe from "stripe";
 
 // Import Routes and Middleware
 import workerRoute from "./routes/workerRoute.js";
@@ -15,9 +15,11 @@ import cartRoutes from "./routes/cartRoute.js";
 import salesRoute from "./routes/salesRoute.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
-dotenv.config();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Initialize Stripe
+// Import Product model for Dialogflow
+import Product from "./models/productModel.js";
 
+dotenv.config();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 // Get __dirname in ES Module scope
@@ -68,14 +70,13 @@ app.use("/api/sales", salesRoute);
 app.post("/api/payment/stripe", async (req, res) => {
   try {
     const { amount } = req.body;
-    
+
     if (!amount) {
       return res.status(400).json({ error: "Amount is required" });
     }
 
-    // Create a PaymentIntent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Convert amount to cents
+      amount: amount * 100,
       currency: "inr",
       payment_method_types: ["card"],
     });
@@ -84,6 +85,34 @@ app.post("/api/payment/stripe", async (req, res) => {
   } catch (error) {
     console.error("Stripe Payment Error:", error.message);
     res.status(500).json({ error: error.message });
+  }
+});
+
+// ✅ Dialogflow Webhook Route
+app.post("/dialogflow-webhook", async (req, res) => {
+  try {
+    const productName = req.body.queryResult.parameters.product;
+
+    const product = await Product.findOne({
+      name: { $regex: new RegExp(productName, "i") }
+    });
+
+    let responseText = "";
+
+    if (product) {
+      responseText = `Yes, ${product.name} is available with ${product.stock} units in stock.`;
+    } else {
+      responseText = `Sorry, we couldn't find ${productName} in our inventory.`;
+    }
+
+    res.json({
+      fulfillmentText: responseText
+    });
+  } catch (error) {
+    console.error("Dialogflow Webhook Error:", error);
+    res.json({
+      fulfillmentText: "Oops! Something went wrong while checking the product."
+    });
   }
 });
 
@@ -98,7 +127,6 @@ app.use(errorHandler);
 // Server Configuration
 const PORT = process.env.PORT || 5001;
 
-// Start the Server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
@@ -106,5 +134,6 @@ app.listen(PORT, () => {
 // Graceful Shutdown
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err.message);
-  app.close(() => process.exit(1));
+  process.exit(1);
 });
+
