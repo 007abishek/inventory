@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 // Axios instance
 const api = axios.create({
   baseURL: 'https://inventory-backend-buxd.onrender.com', // Replace with your backend URL
-  withCredentials: true, // Include cookies for secure API calls
+//  withCredentials: true, // Include cookies for secure API calls
 });
 
 const MerchantRegister = () => {
