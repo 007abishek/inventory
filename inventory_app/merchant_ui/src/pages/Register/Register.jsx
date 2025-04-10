@@ -28,7 +28,7 @@ const MerchantRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/merchants/register', formData);
+      const response = await api.post('/api/merchants/register', formData);
       alert('Merchant registered successfully');
       navigate('/'); // Redirect to login page
     } catch (error) {
