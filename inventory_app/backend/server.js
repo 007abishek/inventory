@@ -15,23 +15,22 @@ import cartRoutes from "./routes/cartRoute.js";
 import salesRoute from "./routes/salesRoute.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
-// Import Product model for Dialogflow
+// Import Mongoose Model
 import Product from "./models/productModel.js";
 
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
-// Get __dirname in ES Module scope
+// Get __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware Configuration
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Multiple origins for CORS
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
@@ -43,7 +42,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -56,21 +55,47 @@ app.use(
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Connect to the Database
+// Connect to DB
 connectDB();
 
-// API Routes
+// Routes
 app.use("/api/worker", workerRoute);
 app.use("/api/merchants", merchantRoute);
 app.use("/api/products", productRoute);
 app.use("/api/cart", cartRoutes);
 app.use("/api/sales", salesRoute);
 
-// 🚀 Stripe Payment Route
+// 💬 Dialogflow Webhook Integration
+app.post("/dialogflow-webhook", async (req, res) => {
+  try {
+    const intent = req.body.queryResult.intent.displayName;
+    const productName = req.body.queryResult.parameters.product;
+
+    if (intent === "CheckStock") {
+      const product = await Product.findOne({
+        name: { $regex: new RegExp(productName, "i") }
+      });
+
+      if (product) {
+        const message = `Yes, ${product.name} is available with ${product.stock} units in stock.`;
+        res.json({ fulfillmentText: message });
+      } else {
+        const message = `Sorry, ${productName} is not available in stock.`;
+        res.json({ fulfillmentText: message });
+      }
+    } else {
+      res.json({ fulfillmentText: "Intent not handled yet." });
+    }
+  } catch (err) {
+    console.error("Dialogflow webhook error:", err);
+    res.json({ fulfillmentText: "There was an error processing your request." });
+  }
+});
+
+// 💳 Stripe Payment Route
 app.post("/api/payment/stripe", async (req, res) => {
   try {
     const { amount } = req.body;
-
     if (!amount) {
       return res.status(400).json({ error: "Amount is required" });
     }
@@ -88,35 +113,7 @@ app.post("/api/payment/stripe", async (req, res) => {
   }
 });
 
-// ✅ Dialogflow Webhook Route
-app.post("/dialogflow-webhook", async (req, res) => {
-  try {
-    const productName = req.body.queryResult.parameters.product;
-
-    const product = await Product.findOne({
-      name: { $regex: new RegExp(productName, "i") }
-    });
-
-    let responseText = "";
-
-    if (product) {
-      responseText = `Yes, ${product.name} is available with ${product.stock} units in stock.`;
-    } else {
-      responseText = `Sorry, we couldn't find ${productName} in our inventory.`;
-    }
-
-    res.json({
-      fulfillmentText: responseText
-    });
-  } catch (error) {
-    console.error("Dialogflow Webhook Error:", error);
-    res.json({
-      fulfillmentText: "Oops! Something went wrong while checking the product."
-    });
-  }
-});
-
-// Base Route
+// Root Route
 app.get("/", (req, res) => {
   res.send("Welcome to the API");
 });
@@ -124,9 +121,8 @@ app.get("/", (req, res) => {
 // Error Middleware
 app.use(errorHandler);
 
-// Server Configuration
+// Server Start
 const PORT = process.env.PORT || 5001;
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
@@ -136,4 +132,3 @@ process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err.message);
   process.exit(1);
 });
-
